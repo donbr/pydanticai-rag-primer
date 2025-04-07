@@ -1,1 +1,0 @@
-"""PydanticAI module stubs."""

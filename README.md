@@ -29,12 +29,11 @@ The system is organized into several interconnected components:
 
 ## 🛠️ Components
 
-The implementation consists of four main Python files:
+The implementation consists of three main Python files:
 
 1. **`rag_ingestion.py`**: Builds the vector database by processing documents and generating embeddings
 2. **`rag_inference.py`**: Core component for answering questions using retrieved context
-3. **`rag.py`**: Complete implementation with CLI for both ingestion and querying
-4. **`rag_api.py`**: FastAPI web interface for accessing the RAG system
+3. **`rag_api.py`**: FastAPI web interface for accessing the RAG system
 
 ## 🚀 Getting Started
 
@@ -54,7 +53,7 @@ The implementation consists of four main Python files:
 
 2. Install dependencies:
    ```bash
-   pip install -e .
+   pip install -r requirements.txt
    ```
 
 3. Set up the PostgreSQL database with pgvector:
@@ -76,28 +75,39 @@ The implementation consists of four main Python files:
 #### 1. Build the vector database
 
 ```bash
-uv run -m pydantic_ai_examples.rag_ingestion
-# or
-uv run -m pydantic_ai_examples.rag build
+python examples/rag_ingestion.py
 ```
 
 #### 2. Ask questions via CLI
 
 ```bash
-uv run -m pydantic_ai_examples.rag_inference "How do I configure logfire to work with FastAPI?"
-# or
-uv run -m pydantic_ai_examples.rag search "How do I configure logfire to work with FastAPI?"
+python examples/rag_inference.py "How do I configure logfire to work with FastAPI?"
 ```
 
 #### 3. Run the web API
 
 ```bash
-uvicorn pydantic_ai_examples.rag_api:app --reload
+uvicorn examples.rag_api:app --reload
 ```
 
 Then visit:
 - API documentation: http://localhost:8000/docs
 - Ask a question: http://localhost:8000/ask?question=How+do+I+configure+logfire+to+work+with+FastAPI?
+
+Example API calls using curl:
+
+```bash
+# GET request
+curl "http://localhost:8000/ask?question=How+do+I+configure+logfire+to+work+with+FastAPI%3F"
+
+# POST request
+curl -X POST "http://localhost:8000/ask" \
+  -H "Content-Type: application/json" \
+  -d '{"question": "How do I configure logfire to work with FastAPI?"}'
+
+# Health check
+curl "http://localhost:8000/health"
+```
 
 ## 💡 Key Features
 
